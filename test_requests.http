@@ -1,0 +1,83 @@
+### Cloud File Storage API - Test Requests
+
+# Base URL
+@baseUrl = http://localhost:8080
+
+### 1. Регистрация пользователя (Signup)
+POST {{baseUrl}}/api/v1/auth/signup
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "password123",
+    "email": "testuser@example.com"
+}
+
+### 2. Регистрация пользователя с невалидными данными (должен вернуть ошибку)
+POST {{baseUrl}}/api/v1/auth/signup
+Content-Type: application/json
+
+{
+    "username": "",
+    "password": "123",
+    "email": "invalid-email"
+}
+
+### 3. Вход пользователя (Signin)
+POST {{baseUrl}}/api/v1/auth/signin
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "password123",
+    "email": "testuser@example.com"
+}
+
+### 4. Тест доступа к защищенному эндпоинту (должен вернуть 401 Unauthorized)
+GET {{baseUrl}}/api/v1/files
+Authorization: Bearer invalid-token
+
+### 5. Тест доступа к Swagger документации (должен быть доступен)
+GET {{baseUrl}}/v3/api-docs
+
+### 6. Тест доступа к корневому эндпоинту (должен вернуть 401 Unauthorized)
+GET {{baseUrl}}/
+
+### 7. Регистрация второго пользователя
+POST {{baseUrl}}/api/v1/auth/signup
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "admin123456",
+    "email": "admin@example.com"
+}
+
+### 8. Тест с минимально допустимым паролем (8 символов)
+POST {{baseUrl}}/api/v1/auth/signup
+Content-Type: application/json
+
+{
+    "username": "minuser",
+    "password": "12345678",
+    "email": "minuser@example.com"
+}
+
+### 9. Тест с коротким паролем (должен вернуть ошибку валидации)
+POST {{baseUrl}}/api/v1/auth/signup
+Content-Type: application/json
+
+{
+    "username": "shortpass",
+    "password": "123",
+    "email": "shortpass@example.com"
+}
+
+### 10. Тест с пустым email (должен пройти, так как email не обязателен)
+POST {{baseUrl}}/api/v1/auth/signup
+Content-Type: application/json
+
+{
+    "username": "noemail",
+    "password": "password123"
+} 

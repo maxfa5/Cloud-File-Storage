@@ -15,7 +15,7 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation ("org.springframework.security:spring-security-crypto:5.7.1")
+    implementation("org.springframework.boot:spring-boot-starter-security")
 
     // Hibernate
     implementation("org.hibernate.orm:hibernate-core:6.4.4.Final")
@@ -23,8 +23,9 @@ dependencies {
     implementation("org.hibernate.validator:hibernate-validator:8.0.1.Final")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 
-    //Liquibase
-    implementation("org.liquibase:liquibase-core")
+    //Flyway
+    implementation("org.flywaydb:flyway-core")
+    implementation("org.flywaydb:flyway-database-postgresql")
 
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")

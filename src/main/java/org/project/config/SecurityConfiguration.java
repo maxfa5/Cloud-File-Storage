@@ -21,13 +21,23 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(new AntPathRequestMatcher(SIGNIN_ENTRY_POINT)).permitAll()
-                .requestMatchers(new AntPathRequestMatcher(SIGNUP_ENTRY_POINT)).permitAll()
-                .requestMatchers(new AntPathRequestMatcher(SWAGGER_ENTRY_POINT)).permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers(SIGNIN_ENTRY_POINT).permitAll()
+                .requestMatchers("/login").permitAll()
+                .requestMatchers("/register").permitAll()
+                .requestMatchers(SIGNUP_ENTRY_POINT).permitAll()
+                .requestMatchers(SWAGGER_ENTRY_POINT).permitAll()
+                .requestMatchers("/login", "/logout", "/error", "/css/**", "/js/**").permitAll()
+                // .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).maximumSessions(2).expiredUrl("/login")
+            )
+            .formLogin(form -> form
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/")
+                .failureUrl("/login?error=true")
+                .permitAll()
             )
             .csrf(csrf -> csrf.disable());
         

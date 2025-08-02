@@ -3,54 +3,67 @@
 # Base URL
 @baseUrl = http://localhost:8080
 
-### 1. Регистрация пользователя (Signup)
+### 1. Регистрация пользователя (Signup) - УСПЕШНЫЙ
 POST {{baseUrl}}/api/v1/auth/signup
 Content-Type: application/json
 
 {
     "username": "testuser",
-    "password": "password123",
-    "email": "testuser@example.com"
+    "password": "password123"
 }
 
-### 2. Регистрация пользователя с невалидными данными (должен вернуть ошибку)
+### 2. Регистрация пользователя с коротким паролем (должен вернуть ошибку)
+POST {{baseUrl}}/api/v1/auth/signup
+Content-Type: application/json
+
+{
+    "username": "shortpass",
+    "password": "123"
+}
+
+### 3. Регистрация пользователя с пустым username (должен вернуть ошибку)
 POST {{baseUrl}}/api/v1/auth/signup
 Content-Type: application/json
 
 {
     "username": "",
-    "password": "123",
-    "email": "invalid-email"
+    "password": "password123"
 }
 
-### 3. Вход пользователя (Signin)
+### 4. Регистрация пользователя с длинным паролем (должен вернуть ошибку)
+POST {{baseUrl}}/api/v1/auth/signup
+Content-Type: application/json
+
+{
+    "username": "longpass",
+    "password": "verylongpasswordthatiswaytoolongandshouldfailvalidationbecauseitsexceeds100characterswhichisthemaximumallowedlengthforpasswords"
+}
+
+### 5. Вход пользователя (Signin) - УСПЕШНЫЙ
 POST {{baseUrl}}/api/v1/auth/signin
 Content-Type: application/json
 
 {
     "username": "testuser",
-    "password": "password123",
-    "email": "testuser@example.com"
+    "password": "password123"
 }
 
-### 4. Тест доступа к защищенному эндпоинту (должен вернуть 401 Unauthorized)
-GET {{baseUrl}}/api/v1/files
-Authorization: Bearer invalid-token
-
-### 5. Тест доступа к Swagger документации (должен быть доступен)
-GET {{baseUrl}}/v3/api-docs
-
-### 6. Тест доступа к корневому эндпоинту (должен вернуть 401 Unauthorized)
-GET {{baseUrl}}/
-
-### 7. Регистрация второго пользователя
-POST {{baseUrl}}/api/v1/auth/signup
+### 6. Вход с неправильным паролем (должен вернуть ошибку)
+POST {{baseUrl}}/api/v1/auth/signin
 Content-Type: application/json
 
 {
-    "username": "admin",
-    "password": "admin123456",
-    "email": "admin@example.com"
+    "username": "testuser",
+    "password": "wrongpassword"
+}
+
+### 7. Вход с несуществующим пользователем (должен вернуть ошибку)
+POST {{baseUrl}}/api/v1/auth/signin
+Content-Type: application/json
+
+{
+    "username": "nonexistent",
+    "password": "password123"
 }
 
 ### 8. Тест с минимально допустимым паролем (8 символов)
@@ -59,25 +72,24 @@ Content-Type: application/json
 
 {
     "username": "minuser",
-    "password": "12345678",
-    "email": "minuser@example.com"
+    "password": "12345678"
 }
 
-### 9. Тест с коротким паролем (должен вернуть ошибку валидации)
+### 9. Тест с максимально допустимым паролем (100 символов)
 POST {{baseUrl}}/api/v1/auth/signup
 Content-Type: application/json
 
 {
-    "username": "shortpass",
-    "password": "123",
-    "email": "shortpass@example.com"
+    "username": "maxuser",
+    "password": "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890"
 }
 
-### 10. Тест с пустым email (должен пройти, так как email не обязателен)
-POST {{baseUrl}}/api/v1/auth/signup
-Content-Type: application/json
+### 10. Тест доступа к защищенному эндпоинту (должен вернуть 401 Unauthorized)
+GET {{baseUrl}}/api/v1/files
+Authorization: Bearer invalid-token
 
-{
-    "username": "noemail",
-    "password": "password123"
-} 
+### 11. Тест доступа к Swagger документации (должен быть доступен)
+GET {{baseUrl}}/v3/api-docs
+
+### 12. Тест доступа к корневому эндпоинту (должен вернуть 401 Unauthorized)
+GET {{baseUrl}}/ 

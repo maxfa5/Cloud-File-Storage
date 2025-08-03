@@ -22,7 +22,7 @@ dependencies {
     implementation("org.hibernate.orm:hibernate-community-dialects:6.4.4.Final")
     implementation("org.hibernate.validator:hibernate-validator:8.0.1.Final")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-
+    implementation("io.jsonwebtoken:jjwt:0.12.5")
     //Flyway
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-database-postgresql")

@@ -1,6 +1,7 @@
 package org.project.service;
 
 import org.project.DTO.UserRegistrationDto;
+import org.project.exception.RegistrationException;
 import org.project.model.User;
 import org.project.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,7 +15,11 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void register(UserRegistrationDto registrationDto) {
+    public void register(UserRegistrationDto registrationDto)  {
+        if (userRepository.findByUsername(registrationDto.getUsername()).isPresent()) {
+            throw new RegistrationException("User with username '" + registrationDto.getUsername() + "' already exists");
+        }
+        
         User user = new User();
         user.setUsername(registrationDto.getUsername());
         user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));

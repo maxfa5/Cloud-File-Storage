@@ -5,13 +5,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import org.project.DTO.UserRegistrationDto;
@@ -41,7 +45,7 @@ public class AuthController {
 
    
     @PostMapping("/signin")
-    public ResponseEntity<AuthResponse> signinUser(@Valid @RequestBody UserRegistrationDto registrationDto) {
+    public ResponseEntity<AuthResponse> signinUser(@Valid @RequestBody UserRegistrationDto registrationDto, HttpServletRequest request) {
         System.out.println("signinUser");
         log.info("Attempting to sign in user: {}", registrationDto.getUsername());
         Authentication authentication;
@@ -58,9 +62,27 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new AuthResponse("Login failed: " + e.getMessage()));
         }
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        
-        return ResponseEntity.ok(AuthResponseMapper.toAuthResponse(authenticationService.login(registrationDto), SIGNIN_SUCCESS));
+        SecurityContext context = SecurityContextHolder.getContext();
+        context.setAuthentication(authentication);
+            HttpSession session = request.getSession(true);
+            session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+            
+            return ResponseEntity.ok(new AuthResponse("Session created successfully"));
+    }
+    
+@GetMapping("/check-session")
+public ResponseEntity<String> checkSession() {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth != null && auth.isAuthenticated()) {
+        return ResponseEntity.ok("Active session for: " + auth.getName());
+    }
+    return ResponseEntity.status(401).body("No active session");
+}
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logoutUser() {
+        SecurityContextHolder.getContext().setAuthentication(null);
+        return ResponseEntity.ok("User logged out successfully");
     }
 
 }

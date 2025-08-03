@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.project.repository.UserRepository;
-import org.project.DTO.AuthenticationResponse;
+import org.project.DTO.AuthenticationResultDto;
 import org.project.DTO.UserRegistrationDto;
 import org.project.model.User;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final UserRepository userRepository;
     
-    public AuthenticationResponse login(UserRegistrationDto request) {
+    public AuthenticationResultDto login(UserRegistrationDto request) {
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
@@ -37,7 +37,7 @@ public class AuthenticationService {
         final String refreshToken =this.jwtService.generateRefreshToken(user.getUsername());
         final String tokenType = "Bearer";
 
-        return new AuthenticationResponse(accessToken, refreshToken, tokenType);
+        return new AuthenticationResultDto(accessToken, refreshToken, tokenType);
 
     }
 }

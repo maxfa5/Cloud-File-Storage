@@ -18,6 +18,7 @@ import org.project.DTO.UserRegistrationDto;
 import org.project.DTO.AuthResponse;
 import org.project.service.UserService;
 import org.project.service.AuthenticationService;
+import org.project.mapper.AuthResponseMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -55,11 +56,11 @@ public class AuthController {
         } catch (Exception e) {
             log.error("Login failed for user: {}", registrationDto.getUsername(), e);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new AuthResponse("Login failed: " + e.getMessage(), null));
+                    .body(new AuthResponse("Login failed: " + e.getMessage()));
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
         
-        return ResponseEntity.ok(new AuthResponse(SIGNIN_SUCCESS, authenticationService.login(registrationDto).getAccessToken()));
+        return ResponseEntity.ok(AuthResponseMapper.toAuthResponse(authenticationService.login(registrationDto), SIGNIN_SUCCESS));
     }
 
 }

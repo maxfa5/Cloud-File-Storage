@@ -10,4 +10,10 @@ import lombok.NoArgsConstructor;
 public class AuthResponse {
     private String message;
     private String token;
+    private String refreshToken;
+    private String tokenType;
+    public AuthResponse(String message) {
+    this.message = message;
+    }
+
 }

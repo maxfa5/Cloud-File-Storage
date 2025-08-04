@@ -2,6 +2,7 @@ package org.project.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,12 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-
+import org.project.DTO.RegistrationResponseDTO;
 import org.project.DTO.UserRegistrationDto;
 import org.project.DTO.AuthResponse;
 import org.project.service.UserService;
-import org.project.service.AuthenticationService;
-import org.project.mapper.AuthResponseMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,12 +33,11 @@ public class AuthController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private static final String SIGNIN_SUCCESS = "User signed in successfully";
-    private final AuthenticationService authenticationService;
     @PostMapping("/signup")
-    public ResponseEntity<String> signupUser(@Valid @RequestBody UserRegistrationDto registrationDto) {
+    public ResponseEntity<RegistrationResponseDTO> signupUser(@Valid @RequestBody UserRegistrationDto registrationDto) {
 
         userService.register(registrationDto);
-        return ResponseEntity.ok("User registered successfully");
+        return ResponseEntity.ok(new RegistrationResponseDTO("User registered successfully"));
     }
 
 
@@ -73,16 +71,22 @@ public class AuthController {
 @GetMapping("/check-session")
 public ResponseEntity<String> checkSession() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    if (auth != null && auth.isAuthenticated()) {
+    if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
         return ResponseEntity.ok("Active session for: " + auth.getName());
     }
     return ResponseEntity.status(401).body("No active session");
 }
 
-    @PostMapping("/logout")
-    public ResponseEntity<String> logoutUser() {
-        SecurityContextHolder.getContext().setAuthentication(null);
-        return ResponseEntity.ok("User logged out successfully");
+    @PostMapping("/sign-out")
+    public ResponseEntity<String> logoutUser(HttpServletRequest request) {
+        SecurityContextHolder.clearContext();
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        System.out.println("It looks like you’re working on a Spring Boot");
+        return ResponseEntity.noContent().build();
     }
+
 
 }

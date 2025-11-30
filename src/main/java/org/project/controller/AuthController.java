@@ -30,9 +30,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
+    
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private static final String SIGNIN_SUCCESS = "User signed in successfully";
+    
+    
     @PostMapping("/signup")
     public ResponseEntity<RegistrationResponseDTO> signupUser(@Valid @RequestBody UserRegistrationDto registrationDto) {
 

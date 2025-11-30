@@ -1,0 +1,256 @@
+.score-legend {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.legend-item {
+    flex: 1;
+    min-width: 200px;
+}
+
+.legend-item h3 {
+    color: #42a7f5;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.legend-item ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.legend-item li {
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.legend-item p {
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.score-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 10px;
+}
+
+.score-label {
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+    .score-legend {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .legend-item {
+        min-width: 100%;
+    }
+}
+
+.matches-container {
+    padding: 20px;
+}
+
+.matches-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 20px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.match-card {
+    border-color: #42a7f5;
+    background-color: #fff;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.match-card:last-child {
+    border-bottom: none;
+}
+
+.match-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.match-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.match-status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.match-status.finished {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.match-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.player-result {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.player-name {
+    font-size: 16px;
+    color: #333;
+}
+
+.winner-indicator {
+    font-size: 14px;
+    color: #666;
+}
+
+.winner-indicator.winner {
+    color: #2e7d32;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .matches-container {
+        padding: 15px;
+    }
+    
+    .match-card {
+        padding: 15px;
+    }
+    
+    .match-header h3 {
+        font-size: 16px;
+    }
+    
+    .player-name {
+        font-size: 14px;
+    }
+}
+
+/* Стили для формы поиска */
+.search-container {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+.search-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.search-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 400px;
+}
+
+.search-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #42a7f5;
+    box-shadow: 0 0 0 3px rgba(66, 167, 245, 0.1);
+}
+
+.search-btn {
+    padding: 12px 16px;
+    background-color: #42a7f5;
+    background-image: url('../images/search.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 20px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+}
+
+.search-btn:hover {
+    background-color: #3a96e0;
+}
+
+.clear-search {
+    color: #6c757d;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    align-self: flex-start;
+}
+
+.clear-search:hover {
+    color: #42a7f5;
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .search-container {
+        padding: 15px;
+        margin: 15px 0;
+    }
+    
+    .search-input-group {
+        max-width: 100%;
+    }
+    
+    .search-input {
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+    
+    .search-btn {
+        padding: 10px 14px;
+        width: 44px;
+        height: 44px;
+        background-size: 18px 18px;
+    }
+} 

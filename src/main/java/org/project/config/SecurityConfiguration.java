@@ -27,19 +27,16 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 public class SecurityConfiguration {
 
     private static final String[] PUBLIC_URLS = {
+        "/api/v1/test/**",
         "/api/v1/auth/signin",
         "/api/v1/auth/signup",
         "/api/v1/auth/check-session",
         "/api/v1/auth/refresh",
-        "/v2/api-docs",
-        "/v3/api-docs",
-        "/v3/api-docs/**",
         "/swagger-resources/**",
         "/swagger-resources",
         "/configuration/ui",
         "/configuration/security",
         "/swagger-ui/**",
-        "/webjars/**",
         "/swagger-ui.html"
 };
     @Bean
@@ -61,27 +58,28 @@ public class SecurityConfiguration {
         return http.build();
     }
 
+    
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+    
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public UserDetailsService userDetailsService(UserRepository userRepository) {
+        System.out.println("userDetailsService");
+        return username -> {
+            User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                Collections.emptyList() //????
+            );
+        };
     }
-
-    @Bean
-public UserDetailsService userDetailsService(UserRepository userRepository) {
-    System.out.println("userDetailsService");
-    return username -> {
-        User user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return new org.springframework.security.core.userdetails.User(
-            user.getUsername(),
-            user.getPassword(),
-            Collections.emptyList()
-        );
-    };
-}
 }

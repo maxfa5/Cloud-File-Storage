@@ -1,5 +1,7 @@
 package org.project.service;
 
+import java.util.List;
+
 import org.project.DTO.UserRegistrationDto;
 import org.project.exception.RegistrationException;
 import org.project.model.User;
@@ -33,5 +35,8 @@ public class UserService {
             throw new RuntimeException("Invalid password");
         }
         return user;
+    }
+    public List<User> getAllusers(){
+        return userRepository.findAll();
     }
 }
